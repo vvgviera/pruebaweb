@@ -10,3 +10,10 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         alert('Usuario o contraseña incorrectos.');
     }
 });
+
+document.getElementById('logoutButton').addEventListener('click', function() {
+    window.location.href = 'index.html'; // Redirige a la página de inicio de sesión
+});
+
+// Puedes agregar lógica aquí para la funcionalidad de "Registrar Usuario" en el futuro.
+
