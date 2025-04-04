@@ -15,15 +15,42 @@ document.getElementById('logoutButton').addEventListener('click', function() {
     window.location.href = 'index.html'; // Redirige a la página de inicio de sesión
 });
 
-// Puedes agregar lógica aquí para la funcionalidad de "Registrar Usuario" en el futuro.
+// Funcionalidad del botón de Log Out
+document.getElementById('logoutButton').addEventListener('click', function() {
+    window.location.href = 'index.html'; // Redirige a la página de inicio de sesión
+});
 
+// Descargar un archivo JSON con usuarios
+function downloadUsers(users) {
+    const blob = new Blob([JSON.stringify(users, null, 2)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'usuarios.json';
+    link.click();
+}
+
+// Leer un archivo JSON de usuarios cargado por el usuario
+function uploadUsers(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        try {
+            const data = JSON.parse(event.target.result);
+            callback(data);
+        } catch (error) {
+            alert('Error al leer el archivo.');
+        }
+    };
+    reader.readAsText(file);
+}
 
 // Array para almacenar usuarios
-const users = [];
+let users = [];
 
 // Manejar el registro de usuarios
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('registerForm');
+    const fileInput = document.getElementById('fileInput');
+
     if (registerForm) {
         registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -34,8 +61,21 @@ document.addEventListener('DOMContentLoaded', function() {
             users.push({ username: newUsername, password: newPassword });
             alert('Usuario registrado exitosamente.');
 
+            // Descargar el archivo con usuarios actualizados
+            downloadUsers(users);
+
             // Redirigir al login
             window.location.href = 'index.html';
+        });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            uploadUsers(file, function(data) {
+                users = data;
+                alert('Usuarios cargados correctamente.');
+            });
         });
     }
 });
@@ -46,7 +86,7 @@ document.getElementById('loginForm')?.addEventListener('submit', function(e) {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // Validar credenciales contra los usuarios registrados
+    // Validar credenciales contra los usuarios cargados
     const userExists = users.some(user => user.username === username && user.password === password);
 
     if (userExists) {
@@ -56,9 +96,5 @@ document.getElementById('loginForm')?.addEventListener('submit', function(e) {
     }
 });
 
-// Funcionalidad del botón de Log Out
-document.getElementById('logoutButton').addEventListener('click', function() {
-    window.location.href = 'index.html'; // Redirige a la página de inicio de sesión
-});
 
 
