@@ -56,3 +56,9 @@ document.getElementById('loginForm')?.addEventListener('submit', function(e) {
     }
 });
 
+// Funcionalidad del botón de Log Out
+document.getElementById('logoutButton').addEventListener('click', function() {
+    window.location.href = 'index.html'; // Redirige a la página de inicio de sesión
+});
+
+
